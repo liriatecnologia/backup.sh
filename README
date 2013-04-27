@@ -18,7 +18,7 @@ subdiretório backup/<ano-mes-dia-horas-minutos>.
 INSTALAÇÃO
 ----------
 
-Basta copiar o arquivo backup.sh para um diretório do sistema e arquivos que
+Basta copiar o arquivo backup.sh para um diretório do sistema de arquivos que
 esteja na PATH e torná-lo executável.
 No Debian, por exemplo, basta copiá-lo para o diretório /usr/local/bin.
 
