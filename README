@@ -1,0 +1,131 @@
+Shell script para fazer backup de um compartilhamento smb ou diretório local
+para um outro compartilhamento smb ou um outro diretório local.
+
+Autor: Renato Candido <renato@liria.com.br>
+Copyright 2013 Liria Tecnologia <http://www.liria.com.br>
+Licença: GPL
+
+SOBRE
+-----
+Shell script para facilitar a utilização do rsync e smbfs a fim de fazer
+backup de de um compartilhamento smb ou diretório local
+para um outro compartilhamento smb ou um outro diretório local.
+No destino especificado, são criados dois subdiretórios: dados e backup
+O conteúdo da origem é sincronizado no subdiretório dados e os arquivos
+excluídos e alterados em cada sincronização são armazenados no
+subdiretório backup/<ano-mes-dia-horas-minutos>.
+
+INSTALAÇÃO
+----------
+
+Basta copiar o arquivo backup.sh para um diretório do sistema e arquivos que
+esteja na PATH e torná-lo executável.
+No Debian, por exemplo, basta copiá-lo para o diretório /usr/local/bin.
+
+O script utiliza os comandos rsync e mount.cifs. No Debian, estes comandos
+são disponibilizados pelos pacotes rsync e smbfs. Para instalá-los basta
+executar
+
+# apt-get install rsync smbfs
+
+CONFIGURAÇÃO
+------------
+
+A configuração é feita no próprio script, no bloco:
+
+##################################################################
+# Configurações:
+
+# Pontos de montagem dos compartilhamentos smb: diretórios onde serão montados
+# os compartilhamentos de origem e/ou destino durante a sincronização de dados
+montagem="/mnt"
+
+# Tempo em dias do backup armazenado
+tempo=30
+
+# Localização do arquivo de log
+locallog="/var/log/backup.log"
+
+# Fazer log via e-mail (requer a instalação do maillog.py)
+fazlog=0
+email=usuario@provedor.com
+assunto="Servidor $(hostname)"
+
+##################################################################
+
+LOG VIA E-MAIL
+--------------
+
+Para os backups que envolvam um compartilhamento smb, de origem ou destino,
+é possível receber um e-mail em caso de falha no acesso ao compartilhanto.
+O e-mail é enviado utilizando o maillog, que está disponível no endereço
+https://github.com/liriatecnologia/maillog 
+
+Para habilitar o envio do e-mail, basta ligar a flag fazlog no bloco de
+configuração, fazendo:
+
+fazlog=1
+
+e configurar o endereço de e-mail para o qual o log deve ser enviado através
+da variável email.
+
+USO
+---
+
+A origem da cópia é informada através do parâmetro -o ou --origem e o destino
+através do parâmetro -d ou --destino. Se uma dessas informações for iniciada
+por //, ela será considerada um compartilhamento smb, caso contrário, será
+considerada um diretório local.
+Se o compartilhamento necessitar de autenticação por usuário e senha,
+o parâmetro -a ou --autentica deve ser utilizado para especificar o usuário
+e a senha que serão utilizados. Caso contrário, o compartilhamento será acessado
+por um usuário convidado (guest).
+
+Desta forma, para fazer um backup:
+
+- De diretório local para diretório local:
+backup.sh -o|--origem <diretório> -d|--destino <diretório>
+
+Exemplo:
+
+backup.sh -o /home/alberto -d /home/backup
+
+- De diretório local para compartilhamento smb:
+backup.sh -o|--origem <diretório> -d|--destino <compartilhamento>
+[-a|--autentica <usuário> <senha>]
+
+Exemplos:
+
+backup.sh -o /home/alberto -d //192.168.0.250/alberto
+
+backup.sh -o /home/alberto -d //192.168.0.250/alberto\
+ -a alberto senhadoalberto
+
+- De compartilhamento smb para diretório local:
+backup.sh -o|--origem <compartilhamento>
+[-a|--autentica <usuário> <senha>] -d <diretório>
+
+Exemplos:
+
+backup.sh -o //192.168.0.250/alberto -d /home/alberto
+
+backup.sh -o //192.168.0.250/alberto -a alberto senhadoalberto\
+ -d /home/alberto
+
+- De compartilhamento smb para compartilhamento smb:
+backup.sh -o|--origem <compartilhamento>
+[-a|--autentica <usuário> <senha>] -d|--destino <compartilhamento>
+[-a|--autentica <usuário> <senha>]
+
+Exemplos
+
+backup.sh -o //192.168.0.250/alberto -d //192.168.0.250/backup
+
+backup.sh -o //192.168.0.250/alberto -a alberto senhadoalberto\
+ -d //192.168.0.250/backup
+
+backup.sh -o //192.168.0.250/alberto -d //192.168.0.250/backup\
+ -a backup senhadobackup
+
+backup.sh -o //192.168.0.250/alberto -a alberto senhadoalberto\
+ -d //192.168.0.250/backup -a backup senhadobackup
