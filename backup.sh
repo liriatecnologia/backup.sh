@@ -275,7 +275,7 @@ then
                 rmdir $montagemdest
                 if [ "$fazlog" = 1 ]
                 then
-                    maillog.py $email "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
+                    maillog.py "$email" "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
                 fi
                 exit 1
             fi
@@ -285,7 +285,7 @@ then
             rmdir $montagemdest
             if [ "$fazlog" = 1 ]
             then
-                maillog.py $email "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
+                maillog.py "$email" "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
             fi
 
             exit 1
@@ -325,7 +325,7 @@ then
             rmdir $montagemorig
             if [ "$fazlog" = 1 ]
             then
-                maillog.py $email "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
+                maillog.py "$email" "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
             fi
             exit 1
         fi
@@ -374,7 +374,7 @@ else
             rmdir $montagemdest
             if [ "$fazlog" = 1 ]
             then
-                maillog.py $email "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
+                maillog.py "$email" "$assunto" "Erro na cópia de $origem para $destino em $bakdirname" &> /dev/null
             fi
             exit 1
         fi
