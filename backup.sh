@@ -53,7 +53,7 @@ locallog="/var/log/backup.log"
 
 # Fazer log via e-mail (requer a instalação do maillog.py)
 fazlog=0
-email=usuario@provedor.com
+email="usuario@provedor.com"
 assunto="Servidor $(hostname)"
 
 ##################################################################
