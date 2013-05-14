@@ -7,7 +7,7 @@ Licença: GPL
 
 SOBRE
 -----
-Shell script para facilitar a utilização do rsync e smbfs a fim de fazer
+Shell script para facilitar a utilização do rsync e mount.cifs a fim de fazer
 backup de de um compartilhamento smb ou diretório local
 para um outro compartilhamento smb ou um outro diretório local.
 No destino especificado, são criados dois subdiretórios: dados e backup
@@ -23,10 +23,10 @@ esteja na PATH e torná-lo executável.
 No Debian, por exemplo, basta copiá-lo para o diretório /usr/local/bin.
 
 O script utiliza os comandos rsync e mount.cifs. No Debian, estes comandos
-são disponibilizados pelos pacotes rsync e smbfs. Para instalá-los basta
-executar
+são disponibilizados pelos pacotes rsync e cifs-utils (antigo smbfs).
+Para instalá-los basta executar
 
-# apt-get install rsync smbfs
+# apt-get install rsync cifs-utils
 
 CONFIGURAÇÃO
 ------------
