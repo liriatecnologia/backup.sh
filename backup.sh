@@ -9,7 +9,7 @@
 # subdiretório backup/<ano-mes-dia-horas-minutos>.
 #
 # Autor: Renato Candido <renato@liria.com.br>
-# Copyright 2013 Liria Tecnologia <http://www.liria.com.br>
+# Copyright 2014 Liria Tecnologia <http://www.liria.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,9 +25,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Versão 0.3
+# Versão 0.4
 #
 # Changelog
+#
+# v0.4 2014-04-03
+# Adicionado suporte à arquivos com nomes contendo espaços (usar aspas"")
 #
 # v0.3 2013-04-26
 # Adicionado suporte à envio de mensagens de log com o maillog.py
@@ -236,23 +239,23 @@ then
         fi
         # Backup de compartilhamento smb para compartilhamento smb
 
-        mkdir -p $montagemorig
-        mkdir -p $montagemdest
-        if mount.cifs $origem $montagemorig $paramorig 2> /dev/null
+        mkdir -p "$montagemorig"
+        mkdir -p "$montagemdest"
+        if mount.cifs "$origem" "$montagemorig" $paramorig 2> /dev/null
         then
-            if mount.cifs $destino $montagemdest $paramdest 2> /dev/null
+            if mount.cifs "$destino" "$montagemdest" $paramdest 2> /dev/null
             then
                 # Cria o diretório $montagemdest/dados, se não existir
-                if ! test -d $montagemdest/dados
+                if ! test -d "$montagemdest/dados"
                 then
-                    mkdir -p $montagemdest/dados
+                    mkdir -p "$montagemdest/dados"
                 fi
 
                 # Sincroniza o compartilhamento $montagemorig em
                 # $montagemdest/dados/, fazendo o backup em $montagemdest/backup
                 rsync -av --delete --backup \
-                --backup-dir=$montagemdest/backup/$bakdirname /$montagemorig/ \
-                $montagemdest/dados/
+                --backup-dir="$montagemdest/backup/$bakdirname" "$montagemorig/" \
+                "$montagemdest/dados/"
 
                 # Exclui os diretórios de backup mais velhos que o tempo
                 # especificado
@@ -293,20 +296,20 @@ then
     else
         # Backup de compartilhamento smb para diretório local
 
-        mkdir -p $montagemorig
-        if mount.cifs $origem $montagemorig $paramorig 2> /dev/null
+        mkdir -p "$montagemorig"
+        if mount.cifs "$origem" "$montagemorig" $paramorig 2> /dev/null
         then
             # Cria o diretório $destino/dados, se não existir
-            if ! test -d $destino/dados
+            if ! test -d "$destino/dados"
             then
-                mkdir -p $destino/dados
+                mkdir -p "$destino/dados"
             fi
 
             # Sincroniza o compartilhamento $origem em $destino/dados/,
             # fazendo o backup em $destino/backup
             rsync -av --delete --backup \
-            --backup-dir=$destino/backup/$bakdirname $montagemorig/ \
-            $destino/dados/
+            --backup-dir="$destino/backup/$bakdirname" "$montagemorig/" \
+            "$destino/dados/"
 
             # Exclui os diretórios de backup mais velhos que o tempo
             # especificado
@@ -342,20 +345,20 @@ else
 
         # Backup de diretório local para compartilhamento smb
 
-        mkdir -p $montagemdest
-        if mount.cifs $destino $montagemdest $paramdest 2> /dev/null
+        mkdir -p "$montagemdest"
+        if mount.cifs "$destino" "$montagemdest" $paramdest 2> /dev/null
         then
             # Cria o diretório $montagemdest/dados, se não existir
-            if ! test -d $montagemdest/dados
+            if ! test -d "$montagemdest/dados"
             then
-                mkdir -p $montagemdest/dados
+                mkdir -p "$montagemdest/dados"
             fi
 
             # Sincroniza o compartilhamento $origem em $montagemdest/dados/,
             # fazendo o backup em $montagemdest/backup
             rsync -av --delete --backup \
-            --backup-dir=$montagemdest/backup/$bakdirname /$origem/ \
-            $montagemdest/dados/
+            --backup-dir="$montagemdest/backup/$bakdirname" "$origem/" \
+            "$montagemdest/dados/"
 
             # Exclui os diretórios de backup mais velhos
             # que o tempo especificado
@@ -382,15 +385,15 @@ else
         # Backup de diretório local para diretório local
 
         # Cria o diretório $destino, se não existir
-        if ! test -d $destino/dados
+        if ! test -d "$destino/dados"
         then
-            mkdir -p $destino/dados
+            mkdir -p "$destino/dados"
         fi
         # Sincroniza o compartilhamento $origem em $destino/dados/,
         # fazendo o backup em $destino/backup
         rsync -av --delete --backup \
-        --backup-dir=$destino/backup/$bakdirname /$origem/ \
-        $destino/dados/
+        --backup-dir="$destino/backup/$bakdirname" "$origem/" \
+        "$destino/dados/"
 
         # Exclui os diretórios de backup mais velhos que o tempo especificado
         if test -d "$destino/backup"

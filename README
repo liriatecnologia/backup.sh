@@ -2,7 +2,7 @@ Shell script para fazer backup de um compartilhamento smb ou diretório local
 para um outro compartilhamento smb ou um outro diretório local.
 
 Autor: Renato Candido <renato@liria.com.br>
-Copyright 2013 Liria Tecnologia <http://www.liria.com.br>
+Copyright 2014 Liria Tecnologia <http://www.liria.com.br>
 Licença: GPL
 
 SOBRE
