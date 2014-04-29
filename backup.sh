@@ -25,12 +25,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Versão 0.4
+# Versão 0.5
 #
 # Changelog
 #
+# v0.5 2014-04-29
+# Corrigido problema com rm -rfd (-d não existe mais)
+#
 # v0.4 2014-04-03
-# Adicionado suporte à arquivos com nomes contendo espaços (usar aspas"")
+# Adicionado suporte à arquivos com nomes contendo espaços (usar aspas "")
 #
 # v0.3 2013-04-26
 # Adicionado suporte à envio de mensagens de log com o maillog.py
@@ -262,7 +265,7 @@ then
                 if test -d "$montagemdest/backup"
                 then
                     find "$montagemdest/backup/" -depth -type d \
-                    -mtime +$((1+$tempo)) -exec rm -rfd {} \;
+                    -mtime +$((1+$tempo)) -exec rm -rf {} \;
                 fi
                 umount $montagemorig
                 umount $montagemdest
@@ -316,7 +319,7 @@ then
             if test -d "$destino/backup"
             then
                 find "$destino/backup/" -depth -type d \
-                -mtime +$((1+$tempo)) -exec rm -rfd {} \;
+                -mtime +$((1+$tempo)) -exec rm -rf {} \;
             fi
             umount $montagemorig
 
@@ -365,7 +368,7 @@ else
             if test -d "$montagemdest/backup"
             then
                 find "$montagemdest/backup/" -depth -type d \
-                -mtime +$((1+$tempo)) -exec rm -rfd {} \;
+                -mtime +$((1+$tempo)) -exec rm -rf {} \;
             fi
             umount $montagemdest
 
@@ -399,7 +402,7 @@ else
         if test -d "$destino/backup"
         then
             find "$destino/backup/" -depth -type d \
-            -mtime +$((1+$tempo)) -exec rm -rfd {} \;
+            -mtime +$((1+$tempo)) -exec rm -rf {} \;
         fi
         echo "Cópia de $origem para $destino executada com sucesso em $bakdirname" > $locallog
         exit 0
