@@ -120,7 +120,7 @@ guestorig=1      # Acesso via conta convidado ou através de autenticação
 guestdest=1      # Acesso via conta convidado ou através de autenticação
                  # ao compartilhamento de destino
 paramorigadc=0   # Parâmetros adicionais para mount.cifs (origem)
-paramorigadc=0   # Parâmetros adicionais para mount.cifs (origem)
+paramorigadc=0   # Parâmetros adicionais para mount.cifs (destino)
 
 # Tratamento das opções de linha de comando
 while test -n "$1"
