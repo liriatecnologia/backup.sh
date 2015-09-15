@@ -29,6 +29,10 @@
 #
 # Changelog
 #
+# v0.6 2015-09-15
+# Adicionado suporte à opções adicionais na montagem de compartilhamentos smb
+# -p sec=ntml, por exemplo
+#
 # v0.5 2014-04-29
 # Corrigido problema com rm -rfd (-d não existe mais)
 #
@@ -87,16 +91,18 @@ $(basename "$0") -o|--origem <diretório> -d|--destino <diretório>
 
 De diretório local para compartilhamento smb:
 $(basename "$0") -o|--origem <diretório> -d|--destino <compartilhamento>
-[-a|--autentica <usuário> <senha>]
+[-a|--autentica <usuário> <senha>] [-p|--parametros <parâmetros>]
 
 De compartilhamento smb para diretório local:
 $(basename "$0") -o|--origem <compartilhamento>
-[-a|--autentica <usuário> <senha>] -d <diretório>
+[-a|--autentica <usuário> <senha>] [-p|--parametros <parâmetros>] 
+-d <diretório>
 
 De compartilhamento smb para compartilhamento smb:
 $(basename "$0") -o|--origem <compartilhamento>
-[-a|--autentica <usuário> <senha>] -d|--destino <compartilhamento>
-[-a|--autentica <usuário> <senha>]
+[-a|--autentica <usuário> <senha>] [-p|--parametros <parâmetros>]
+-d|--destino <compartilhamento> [-a|--autentica <usuário> <senha>]
+[-p|--parametros <parâmetros>]
 
 Os caminhos para os diretórios devem ser informados sem a inclusão da barra
 final, como em /home/usuario/diretorio
@@ -113,6 +119,8 @@ guestorig=1      # Acesso via conta convidado ou através de autenticação
                  # ao compartilhamento de origem
 guestdest=1      # Acesso via conta convidado ou através de autenticação
                  # ao compartilhamento de destino
+paramorigadc=0   # Parâmetros adicionais para mount.cifs (origem)
+paramorigadc=0   # Parâmetros adicionais para mount.cifs (origem)
 
 # Tratamento das opções de linha de comando
 while test -n "$1"
@@ -146,6 +154,14 @@ do
                     shift
                     guestorig=0
                 fi
+                if [ "$1" = "-p" -o "$1" = "--parametros" ]
+                then
+                    shift
+                    paramorigad="$1"
+                    paramorigadc=1
+                    # Opção $1 já processada, a fila deve andar
+                    shift
+                fi
             else
                 # Opção $1 já processada, a fila deve andar
                 shift
@@ -178,6 +194,14 @@ do
                     # Opção $1 já processada, a fila deve andar
                     shift
                     guestdest=0
+                fi
+                if [ "$1" = "-p" -o "$1" = "--parametros" ]
+                then
+                    shift
+                    paramdestad="$1"
+                    paramdestadc=1
+                    # Opção $1 já processada, a fila deve andar
+                    shift
                 fi
             else
                 # Opção $1 já processada, a fila deve andar
@@ -231,7 +255,10 @@ then
     else
         paramorig="-o guest"
     fi
-
+    if test "$paramorigadc" = 1
+    then
+        paramorig="$paramorig,$paramorigad"
+    fi
     if [ "$smbdest" = 1 ]
     then
         if test "$guestdest" = 0
@@ -239,6 +266,10 @@ then
             paramdest="-o user=$usuariodest,password=$senhadest"
         else
             paramdest="-o guest"
+        fi
+        if test "$paramdestadc" = 1
+        then
+            paramdest="$paramdest,$paramdestad"
         fi
         # Backup de compartilhamento smb para compartilhamento smb
 
@@ -345,7 +376,11 @@ else
         else
             paramdest="-o guest"
         fi
-
+        if test "$paramdestadc" = 1
+        then
+            paramdest="$paramdest,paramdestad"
+        fi
+        
         # Backup de diretório local para compartilhamento smb
 
         mkdir -p "$montagemdest"
@@ -386,7 +421,7 @@ else
         fi
     else
         # Backup de diretório local para diretório local
-
+        
         # Cria o diretório $destino, se não existir
         if ! test -d "$destino/dados"
         then
