@@ -34,7 +34,7 @@
 #
 # v0.6 2015-09-15
 # Adicionado suporte à opções adicionais na montagem de compartilhamentos smb
-# -p sec=ntml, por exemplo
+# -p sec=ntlm, por exemplo
 #
 # v0.5 2014-04-29
 # Corrigido problema com rm -rfd (-d não existe mais)
