@@ -29,6 +29,9 @@
 #
 # Changelog
 #
+# v0.7 2015-09-19
+# Correções de bugs relativos ao uso do parâmetro -p
+#
 # v0.6 2015-09-15
 # Adicionado suporte à opções adicionais na montagem de compartilhamentos smb
 # -p sec=ntml, por exemplo
@@ -120,7 +123,7 @@ guestorig=1      # Acesso via conta convidado ou através de autenticação
 guestdest=1      # Acesso via conta convidado ou através de autenticação
                  # ao compartilhamento de destino
 paramorigadc=0   # Parâmetros adicionais para mount.cifs (origem)
-paramorigadc=0   # Parâmetros adicionais para mount.cifs (destino)
+paramdestadc=0   # Parâmetros adicionais para mount.cifs (destino)
 
 # Tratamento das opções de linha de comando
 while test -n "$1"
@@ -378,7 +381,7 @@ else
         fi
         if test "$paramdestadc" = 1
         then
-            paramdest="$paramdest,paramdestad"
+            paramdest="$paramdest,$paramdestad"
         fi
         
         # Backup de diretório local para compartilhamento smb
