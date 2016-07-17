@@ -25,7 +25,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Versão 0.5
+# Versão 0.7
 #
 # Changelog
 #
