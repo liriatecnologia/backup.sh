@@ -9,7 +9,7 @@
 # subdiretório backup/<ano-mes-dia-horas-minutos>.
 #
 # Autor: Renato Candido <renato@liria.com.br>
-# Copyright 2014 Liria Tecnologia <http://www.liria.com.br>
+# Copyright 2016 Liria Tecnologia <http://www.liria.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,9 +25,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Versão 0.7
+# Versão 0.8
 #
 # Changelog
+#
+# v0.8 2016-07-18
+# Correção para ignorar dono e grupo ao fazer backup para compartilhamento smb
 #
 # v0.7 2015-09-19
 # Correções de bugs relativos ao uso do parâmetro -p
@@ -290,7 +293,7 @@ then
 
                 # Sincroniza o compartilhamento $montagemorig em
                 # $montagemdest/dados/, fazendo o backup em $montagemdest/backup
-                rsync -av --delete --backup \
+                rsync -av --delete --no-owner --no-group --backup \
                 --backup-dir="$montagemdest/backup/$bakdirname" "$montagemorig/" \
                 "$montagemdest/dados/"
 
@@ -397,7 +400,7 @@ else
 
             # Sincroniza o compartilhamento $origem em $montagemdest/dados/,
             # fazendo o backup em $montagemdest/backup
-            rsync -av --delete --backup \
+            rsync -av --delete --no-owner --no-group --backup \
             --backup-dir="$montagemdest/backup/$bakdirname" "$origem/" \
             "$montagemdest/dados/"
 
